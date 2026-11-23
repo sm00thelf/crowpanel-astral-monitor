@@ -1,0 +1,35 @@
+CONFIG_IDF_TARGET="esp32s3"
+
+# Board: 4 MB QIO flash, 2 MB quad PSRAM, both at 80 MHz
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_QUAD=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+
+# Rendering speed
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y
+CONFIG_FREERTOS_HZ=1000
+
+# RGB panel: resync on every vsync
+CONFIG_LCD_RGB_RESTART_IN_VSYNC=y
+
+# The 261 KB framebuffer lives in internal RAM, so keep everything else out of it:
+# LVGL allocates from the system heap (PSRAM for anything large) instead of a fixed 64 KB internal pool.
+CONFIG_LV_USE_CLIB_MALLOC=y
+# The framebuffer needs 261 KB in one piece out of a 307 KB region. The default 32 KB reserve pool is carved out of
+# that region first and left too little once NVS was linked in (boot loop: "no mem for frame buffer").
+CONFIG_SPIRAM_MALLOC_RESERVE_INTERNAL=8192
+
+# LVGL
+CONFIG_LV_COLOR_DEPTH_16=y
+CONFIG_LV_DEF_REFR_PERIOD=10
+CONFIG_LV_FONT_MONTSERRAT_20=y
+CONFIG_LV_THEME_DEFAULT_DARK=y
+
+# Touch: deliver raw ADC values; main.c applies the calibration from board.h
+CONFIG_XPT2046_CONVERT_ADC_TO_COORDS=n

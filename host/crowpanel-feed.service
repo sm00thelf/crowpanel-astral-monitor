@@ -1,0 +1,13 @@
+# User unit: runs in the desktop session, which is what grants access to the GPU's /dev/i2c-N.
+#   systemctl --user enable --now ~/GitHub/crowpanel-astral-monitor/host/crowpanel-feed.service
+# Stop it before flashing (same serial port): systemctl --user stop crowpanel-feed
+[Unit]
+Description=CrowPanel GPU monitor feed
+
+[Service]
+ExecStart=/usr/bin/python3 %h/GitHub/crowpanel-astral-monitor/host/feed.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
